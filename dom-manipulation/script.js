@@ -16,11 +16,19 @@ function showRandomQuote(){
     displayQuote.textContent = "There is are no quotes to display";
     return;
   }
-  const randomIndex = Math.floor(Math.random()*quotes.lenght);
-  
-  quoteDisplay.innerHTML = `<p>"${quote.text}"</p>
-  <small><em>Category: ${quote.category}</em></small> `;
+   const randomIndex = Math.floor(Math.random()*quotes.lenght);
+   const quote = quotes[randomIndex];
+}
+//creating new quote element
+const quoteText = document.createElement("p");
+quoteText.textContent = `"${quote.text}"`;
 
+const quoteCategory = document.createElement("small");
+quoteCategory.innerHTML = `<em>Category: ${quote.category}</em>`;
+
+  // Append to container
+quoteDisplay.appendChild(quoteText);
+quoteDisplay.appendChild(quoteCategory);
 }
 
 //function to add quotes
