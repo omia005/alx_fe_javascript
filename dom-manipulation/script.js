@@ -10,6 +10,8 @@ let quotes = [
 const showQuoteBtn = document.getElementById("newQuote");
 const displayQuote = document.getElementById("quoteDisplay");
 
+let importInput, exportButton;
+
 
 // Load quotes from local storage if available
 function loadQuotes() {
@@ -58,6 +60,62 @@ function createAddQuoteForm(){
   const newQuote = { text: newQuoteText, category: newQuoteCategory };
   quotes.push(newQuote);
 
+  function createImportExportControls() {
+  // Create import input
+  importInput = document.createElement("input");
+  importInput.type = "file";
+  importInput.accept = ".json";
+  importInput.style.margin = "10px";
+  importInput.addEventListener("change", importQuotes);
+
+  // Create export button
+  exportButton = document.createElement("button");
+  exportButton.textContent = "Export Quotes";
+  exportButton.addEventListener("click", exportQuotes);
+
+  // Add to page
+  document.body.appendChild(importInput);
+  document.body.appendChild(exportButton);
+}
+
+function exportQuotes() {
+  const dataStr = JSON.stringify(quotes, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "quotes.json";
+  link.click();
+}
+
+function importQuotes(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const importedQuotes = JSON.parse(e.target.result);
+      if (Array.isArray(importedQuotes)) {
+        quotes = importedQuotes;
+        saveQuotes();
+        alert("Quotes imported successfully!");
+        showRandomQuote();
+      } else {
+        alert("Invalid file format.");
+      }
+    } catch (err) {
+      alert("Error reading JSON file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function init() {
+  loadQuotes();
+  createImportExportControls();
+}
   // Clear input fields
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
@@ -76,3 +134,4 @@ addQuote.addEventListener("click", showRandomQuote);
 
 // Initial display
 showRandomQuote();
+
