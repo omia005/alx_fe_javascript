@@ -1,1 +1,3 @@
-function 
+quotes = ["text","category"];
+
+function showRandomQuote()
