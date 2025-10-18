@@ -11,7 +11,7 @@ const showQuoteBtn = document.getElementById("newQuote");
 const displayQuote = document.getElementById("quoteDisplay");
 
 //function to show quotes
-function displayRandomQuote(){
+function showRandomQuote(){
   if (quotes.length === 0){
     displayQuote.textContent = "There is are no quotes to display";
     return;
@@ -51,7 +51,7 @@ function addQuote(){
   console.log("All quotes:", quotes);
 }
 
-addQuote.addEventListener("click", displayRandomQuote);
+addQuote.addEventListener("click", showRandomQuote);
 
 // Initial display
-displayRandomQuote();
+showRandomQuote();
