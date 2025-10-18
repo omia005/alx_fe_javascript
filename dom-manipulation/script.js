@@ -10,6 +10,19 @@ let quotes = [
 const showQuoteBtn = document.getElementById("newQuote");
 const displayQuote = document.getElementById("quoteDisplay");
 
+
+// Load quotes from local storage if available
+function loadQuotes() {
+  const savedQuotes = localStorage.getItem("quotes");
+  if (savedQuotes) {
+    quotes = JSON.parse(savedQuotes);
+  }
+}
+
+// Save quotes to local storage
+function saveQuotes() {
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+}
 //function to show quotes
 function showRandomQuote(){
   if (quotes.length === 0){
