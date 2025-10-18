@@ -16,7 +16,7 @@ function showRandomQuote(){
     displayQuote.textContent = "There is are no quotes to display";
     return;
   }
-  const randomIndex = math.floor(math.random()*quotes.lenght);
+  const randomIndex = Math.floor(Math.random()*quotes.lenght);
   
   quoteDisplay.innerHTML = `<p>"${quote.text}"</p>
   <small><em>Category: ${quote.category}</em></small> `;
