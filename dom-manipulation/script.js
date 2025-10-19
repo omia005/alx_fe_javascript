@@ -132,7 +132,7 @@ function importQuotes(event) {
   }
   reader.readAsText(file);
 }
-const SERVER_URL = "https://mockapi.io/api/quotes"; // Replace with your real mock API endpoint
+const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; 
 
 // Sync interval (10 seconds)
 const SYNC_INTERVAL = 10000;
