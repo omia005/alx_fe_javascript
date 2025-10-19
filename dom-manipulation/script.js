@@ -159,6 +159,8 @@ async function syncQuotes() {
   return fetchQuotesFromServer(); // Reuse existing logic
 }
 
+setInterval(syncQuotes, 30000);
+
 // Send new quote to the server when added
 async function sendToServer(newQuote) {
   try {
