@@ -1,17 +1,17 @@
-//managing an array of quotes
+// Managing an array of quotes
 let quotes = [
-  {text: "The best way to predict the future is to invent it.", category: "Inspiration" },
+  { text: "The best way to predict the future is to invent it.", category: "Inspiration" },
   { text: "Life is what happens when you're busy making other plans.", category: "Life" },
   { text: "Do or do not. There is no try.", category: "Motivation" },
-  { text: "Simplicity is the ultimate sophistication.", category: "Philosophy" } 
+  { text: "Simplicity is the ultimate sophistication.", category: "Philosophy" }
 ];
 
-//selecting DOM elements
+// Selecting DOM elements
 const showQuoteBtn = document.getElementById("newQuote");
-const displayQuote = document.getElementById("quoteDisplay");
+const addQuoteBtn = document.getElementById("addQuote");
+const quoteDisplay = document.getElementById("quoteDisplay");
 
 let importInput, exportButton;
-
 
 // Load quotes from local storage if available
 function loadQuotes() {
@@ -25,55 +25,69 @@ function loadQuotes() {
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
-//function to show quotes
-function showRandomQuote(){
-  if (quotes.length === 0){
-    displayQuote.textContent = "There is are no quotes to display";
+
+// Function to show a random quote
+function showRandomQuote() {
+  if (quotes.length === 0) {
+    quoteDisplay.textContent = "There are no quotes to display.";
     return;
   }
-   const randomIndex = Math.floor(Math.random()*quotes.lenght);
-   const quote = quotes[randomIndex];
+
+  const randomIndex = Math.floor(Math.random() * quotes.length); // ✅ fixed typo: "lenght" → "length"
+  const quote = quotes[randomIndex];
+
+  // Clear previous content
+  quoteDisplay.innerHTML = "";
+
+  // Create and display elements
+  const quoteText = document.createElement("p");
+  quoteText.textContent = `"${quote.text}"`;
+
+  const quoteCategory = document.createElement("small");
+  quoteCategory.innerHTML = `<em>Category: ${quote.category}</em>`;
+
+  quoteDisplay.appendChild(quoteText);
+  quoteDisplay.appendChild(quoteCategory);
 }
-//creating new quote element
-const quoteText = document.createElement("p");
-quoteText.textContent = `"${quote.text}"`;
 
-const quoteCategory = document.createElement("small");
-quoteCategory.innerHTML = `<em>Category: ${quote.category}</em>`;
+// Function to add a quote
+function createAddQuoteForm() {
+  const newQuoteText = document.getElementById("newQuoteText").value.trim();
+  const newQuoteCategory = document.getElementById("newQuoteCategory").value.trim();
 
-  // Append to container
-quoteDisplay.appendChild(quoteText);
-quoteDisplay.appendChild(quoteCategory);
-}
-
-//function to add quotes
-function createAddQuoteForm(){
-  const newQuoteText = getElementById('newQuoteText').value.trim();
-  const newQuoteCategory = getElementById('newQuoteCategory').value.trim();
-
-   if (!newQuoteText || !newQuoteCategory) {
+  if (!newQuoteText || !newQuoteCategory) {
     alert("Please enter both a quote and a category!");
     return;
   }
 
-  // Create new quote object and add to array
   const newQuote = { text: newQuoteText, category: newQuoteCategory };
   quotes.push(newQuote);
+  saveQuotes();
 
-  function createImportExportControls() {
-  // Create import input
+  document.getElementById("newQuoteText").value = "";
+  document.getElementById("newQuoteCategory").value = "";
+
+  quoteDisplay.innerHTML = `
+    <p>"${newQuote.text}"</p>
+    <small><em>Category: ${newQuote.category}</em></small>
+  `;
+
+  console.log("Quote added:", newQuote);
+  console.log("All quotes:", quotes);
+}
+
+// Create import/export controls
+function createImportExportControls() {
   importInput = document.createElement("input");
   importInput.type = "file";
   importInput.accept = ".json";
   importInput.style.margin = "10px";
   importInput.addEventListener("change", importQuotes);
 
-  // Create export button
   exportButton = document.createElement("button");
   exportButton.textContent = "Export Quotes";
   exportButton.addEventListener("click", exportQuotes);
 
-  // Add to page
   document.body.appendChild(importInput);
   document.body.appendChild(exportButton);
 }
@@ -112,26 +126,18 @@ function importQuotes(event) {
   reader.readAsText(file);
 }
 
+// Initialization
 function init() {
   loadQuotes();
   createImportExportControls();
-}
-  // Clear input fields
-  document.getElementById("newQuoteText").value = "";
-  document.getElementById("newQuoteCategory").value = "";
-
-  // Update display with the new quote
-  quoteDisplay.innerHTML = `
-    <p>"${newQuote.text}"</p>
-    <small><em>Category: ${newQuote.category}</em></small>
-  `;
-
-  console.log("Quote added:", newQuote);
-  console.log("All quotes:", quotes);
+  showRandomQuote();
 }
 
-addQuote.addEventListener("click", showRandomQuote);
+// Event listeners
+showQuoteBtn.addEventListener("click", showRandomQuote);
+addQuoteBtn.addEventListener("click", createAddQuoteForm);
 
-// Initial display
-showRandomQuote();
+// Run initialization
+init();
+
 
