@@ -138,7 +138,7 @@ const SERVER_URL = "https://jsonplaceholder.typicode.com/posts";
 const SYNC_INTERVAL = 10000;
 
 // Fetch quotes from server
-async function fetchQuotesFromServer() {
+async function syncQuotes() {
   try {
     const response = await fetch(SERVER_URL);
     if (!response.ok) throw new Error("Server fetch failed");
