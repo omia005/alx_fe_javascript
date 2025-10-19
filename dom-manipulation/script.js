@@ -94,6 +94,8 @@ function filterQuotes() {
   const selectedCategory = categoryFilter.value;
   localStorage.setItem("selectedCategory", selectedCategory);
   showRandomQuote();
+
+  await sendToServer(newQuote);
 }
 
 // Export quotes as JSON file
@@ -129,6 +131,79 @@ function importQuotes(event) {
     }
   }
   reader.readAsText(file);
+}
+const SERVER_URL = "https://mockapi.io/api/quotes"; // Replace with your real mock API endpoint
+
+// Sync interval (10 seconds)
+const SYNC_INTERVAL = 10000;
+
+// Fetch quotes from server
+async function fetchFromServer() {
+  try {
+    const response = await fetch(SERVER_URL);
+    if (!response.ok) throw new Error("Server fetch failed");
+
+    const serverQuotes = await response.json();
+
+    // Merge with local quotes (server takes precedence)
+    mergeQuotes(serverQuotes);
+
+    // Notify user
+    showNotification(" Quotes synced with server!");
+  } catch (error) {
+    console.error("Error syncing with server:", error);
+  }
+}
+
+// Send new quote to the server when added
+async function sendToServer(newQuote) {
+  try {
+    await fetch(SERVER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newQuote)
+    });
+  } catch (error) {
+    console.error("Failed to send quote to server:", error);
+  }
+}
+
+// Merge local & server data (server wins conflicts)
+function mergeQuotes(serverQuotes) {
+  const localQuotes = quotes;
+
+  // Create a map of server quotes using 'text' + 'category' as key
+  const serverMap = new Map(
+    serverQuotes.map(q => [`${q.text}-${q.category}`, q])
+  );
+
+  // Merge: add local quotes that aren’t on the server
+  localQuotes.forEach(localQuote => {
+    const key = `${localQuote.text}-${localQuote.category}`;
+    if (!serverMap.has(key)) {
+      serverMap.set(key, localQuote);
+    }
+  });
+
+  // Save merged to local storage
+  quotes = Array.from(serverMap.values());
+  saveQuotes();
+  populateCategories();
+}
+
+// Notification UI (simple)
+function showNotification(message) {
+  const note = document.createElement("div");
+  note.textContent = message;
+  note.style.position = "fixed";
+  note.style.bottom = "10px";
+  note.style.right = "10px";
+  note.style.padding = "10px";
+  note.style.background = "lightgreen";
+  note.style.border = "1px solid #333";
+  document.body.appendChild(note);
+
+  setTimeout(() => note.remove(), 3000);
 }
 
 // Event listeners
