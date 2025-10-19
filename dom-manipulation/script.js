@@ -11,7 +11,7 @@ const quoteDisplay = document.getElementById("quoteDisplay");
 const importInput = document.getElementById("importQuotes");
 const exportButton = document.getElementById("exportQuotes");
 
-// ✅ Required by your checker
+
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
@@ -49,7 +49,7 @@ function addQuote() {
 
   const newQuote = { text, category };
   quotes.push(newQuote);
-  saveQuotes(); // ✅ Required
+  saveQuotes();
 
   showRandomQuote();
 }
@@ -74,7 +74,7 @@ function importQuotes(event) {
       const importedQuotes = JSON.parse(e.target.result);
       if (Array.isArray(importedQuotes)) {
         quotes = importedQuotes;
-        saveQuotes(); // ✅ Required
+        saveQuotes(); 
         showRandomQuote();
       } else {
         alert("Invalid file format.");
