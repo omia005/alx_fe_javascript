@@ -138,7 +138,7 @@ const SERVER_URL = "https://mockapi.io/api/quotes"; // Replace with your real mo
 const SYNC_INTERVAL = 10000;
 
 // Fetch quotes from server
-async function fetchFromServer() {
+async function fetchQuotesFromServer() {
   try {
     const response = await fetch(SERVER_URL);
     if (!response.ok) throw new Error("Server fetch failed");
